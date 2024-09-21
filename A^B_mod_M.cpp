@@ -30,7 +30,7 @@ int pwr(int a,int b)
     int ans=1;
     while(b>0)
     {
-        if(b%2!=0)ans=(ans*a)%mod; ;
+        if(b%2!=0)ans=(ans*a)%mod;
         a = (a*a)%mod;
         b>>=1;
     }
