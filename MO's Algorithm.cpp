@@ -1,4 +1,4 @@
-///https://codeforces.com/contest/86/problem/D
+//https://codeforces.com/contest/2014/problem/H
 
 #include<bits/stdc++.h>
 using namespace std;
@@ -31,19 +31,38 @@ void edm()
 }
 const int N = 1e6+9;
 int cnt[N];
-const int B = 800;
+int arr[N];
+const int B = 450;
+int have;
 bool cmp(pair<pair<int,int>,int>x,pair<pair<int,int>,int>y)
 {
-        int now = (x.ff.ff)/B , now2 = (y.ff.ff)/B;
-        if(now != now2) return (now < now2);
-        return ((x.ff.ss) < (y.ff.ss));
+    int now = (x.ff.ff)/B , now2 = (y.ff.ff)/B;
+    if(now != now2) return (now < now2);
+    return ((x.ff.ss) < (y.ff.ss));
+}
+void add(int pos)
+{
+    int num = arr[pos];
+    cnt[num]++;
+    if(cnt[num]%2==0)have--;
+    else have++;
+}
+void rem(int pos)
+{
+    int num = arr[pos];
+    cnt[num]--;
+    if(cnt[num]%2==0)have--;
+    else have++;
 }
 void solve()
 {
     int n,q;cin>>n>>q;
-    int arr[n+5];
-    for(int i=1;i<=n;i++)cin>>arr[i];
-    int ans=0;
+    for(int i=1;i<=n;i++)
+    {
+        cin>>arr[i];
+        cnt[arr[i]]=0;
+    }
+    have=0;
     int ll=1,rr=1;
     vector<pair<pair<int,int>,int>>v;
     int save[q+1];
@@ -55,14 +74,13 @@ void solve()
     sort(v.begin(),v.end(),cmp);
     int l=v[0].ff.ff;
     int r=v[0].ff.ss;
+    multiset<int>st;
     for(int i=l;i<=r;i++)
     {
-        int num = arr[i];
-        ans = ans - (cnt[num]*cnt[num]*num);
-        cnt[num]++;
-        ans = ans + (cnt[num]*cnt[num]*num);
-        save[v[0].ss]=ans;
+        add(i);
     }
+    //cout<<have<<endl;
+    save[v[0].ss]=have;
     ll=l;rr=r;
     for(int j=1;j<q;j++)
     {
@@ -70,46 +88,36 @@ void solve()
         r=v[j].ff.ss;
         for(int i=ll;i<l;i++)
         {
-            int num=arr[i];
-            ans = ans - (cnt[num]*cnt[num]*num);
-            cnt[num]--;
-            ans = ans + (cnt[num]*cnt[num]*num);
+            rem(i);
         }
         for(int i=l;i<ll;i++)
         {
-            int num=arr[i];
-            ans = ans - (cnt[num]*cnt[num]*num);
-            cnt[num]++;
-            ans = ans + (cnt[num]*cnt[num]*num);
+            add(i);
         }
         for(int i=r+1;i<=rr;i++)
         {
-            int num=arr[i];
-            ans = ans - (cnt[num]*cnt[num]*num);
-            cnt[num]--;
-            ans = ans + (cnt[num]*cnt[num]*num);
+            rem(i);
         }
         for(int i=rr+1;i<=r;i++)
         {
-            int num=arr[i];
-            ans = ans - (cnt[num]*cnt[num]*num);
-            cnt[num]++;
-            ans = ans + (cnt[num]*cnt[num]*num);
+            add(i);
         }
-        save[v[j].ss]=ans;
+        save[v[j].ss]=have;
         ll=v[j].ff.ff;
         rr=v[j].ff.ss;
     }
     for(int i=0;i<q;i++)
     {
-        cout<<save[i]<<endl;
+        if(save[i])NO;
+        else YES;
     }
+    for(int i=1;i<=n;i++)cnt[arr[i]]=0;
 }
 int32_t main()
 {
     edm();
     int t = 1;
-    //cin >> t;
+    cin >> t;
     for(int i=1;i<=t;i++)
     {
         solve();
