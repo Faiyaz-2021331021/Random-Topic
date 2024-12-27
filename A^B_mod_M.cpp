@@ -25,7 +25,8 @@ void edm()
     #endif
 }
 int mod = 1e9 + 7;
-int pwr(int a,int b) ///no mode
+//no mod
+int pwr(int a,int b) ///no mod
 {
     int ans=1;
     while(b>0)
@@ -36,6 +37,8 @@ int pwr(int a,int b) ///no mode
     }
     return ans;
 }
+
+//with mod
 int pwr(int a,int b)
 {
     int ans=1;
